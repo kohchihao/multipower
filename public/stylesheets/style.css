@@ -1,6 +1,7 @@
 body {
   padding: 0px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0px;
 }
 
 a {
@@ -8,19 +9,20 @@ a {
 }
 #table-wrapper {
   display: flex;
-  
+
 }
 th {
   background-color: whitesmoke;
-  padding: 1em;
+  padding: 0em;
   text-align: left;
   border: 1px solid black;
-  padding: 1em;
+  padding: 0em;
   text-align: center;
 }
 td {
+  background-color: white;
   border: 1px solid black;
-  padding: 1em;
+  padding: 0em;
 }
 
 #desc {

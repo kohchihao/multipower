@@ -12,13 +12,16 @@ block content
       tr
         td=val.mOperator
           
-        td=val.mServiceNo
+        td#tdBold=val.mServiceNo
           
         td 
           div
             table#des
               tr 
-                td#tda=val.mNextBusTiming
+                if val.mNextBusTiming === 'Arriving'
+                  td#tdRed=val.mNextBusTiming 
+                else 
+                  td#tda=val.mNextBusTiming 
                 //td#tda=val.mNextBusFeature
                 //span=val.mNextBusType
         td 

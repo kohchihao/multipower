@@ -3,7 +3,7 @@ var router = express.Router();
 var rp = require('request-promise');
 //var moment = require('moment');
 var moment = require('moment-timezone');
-moment().tz("Asia/Singapore").format();
+moment.tz.setDefault("Asia/Singapore");
 /* GET home page. */
 router.get('/:busId', function(req, res, next) {
   
@@ -13,7 +13,7 @@ router.get('/:busId', function(req, res, next) {
   
 });
 
-getBusData = (busId,cb) => {
+const getBusData = (busId,cb) => {
   
   let url = 'http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode='+busId;
   let options = {
@@ -30,14 +30,17 @@ getBusData = (busId,cb) => {
       let bus = [];
       //console.log(data);
       let json = JSON.parse(data);
+      console.log(data);
       json.Services.forEach(item => {
             
             var mServiceNo = item.ServiceNo 
             var mOperator = item.Operator
 
             var nextBus = item.NextBus 
-            
-            var mNextBusTiming = nextBus.EstimatedArrival.substring(11,16)
+            //2018-04-15T00:16:28+08:00
+            //var mNextBusTiming = nextBus.EstimatedArrival.substring(11,16)
+            var mNextBusTiming = nextBus.EstimatedArrival
+
             mNextBusTiming =  convertToMins(mNextBusTiming);
         		var mNextBusFeature = nextBus.Feature 
             var mNextBusLoad = nextBus.Load 
@@ -51,7 +54,7 @@ getBusData = (busId,cb) => {
             }
 
         		var subBus = item.NextBus2 
-            var mSubBusTiming = subBus.EstimatedArrival.substring(11,16)
+            var mSubBusTiming = subBus.EstimatedArrival
             mSubBusTiming = convertToMins(mSubBusTiming);
         		var mSubBusFeature = subBus.Feature 
         		var mSubBusLoad = subBus.Load 
@@ -66,7 +69,7 @@ getBusData = (busId,cb) => {
 
 
         		var subBus3 = item.NextBus3
-            var mSubBus3Timing = subBus3.EstimatedArrival.substring(11,16)
+            var mSubBus3Timing = subBus3.EstimatedArrival
             mSubBus3Timing = convertToMins(mSubBus3Timing);
         		var mSubBus3Feature = subBus3.Feature
             var mSubBus3Load = subBus3.Load
@@ -90,17 +93,20 @@ getBusData = (busId,cb) => {
       });
       console.log(bus)
       cb(bus);
-        // Process html like you would with jQuery...
     })
     .catch(function (err) {
         // Crawling failed or Cheerio choked...
     });
 }
 
-convertToMins = (date) => {
-  let m = moment(date, "HH:mm").fromNow();
+const convertToMins = (date) => {
+  //2018-04-15T00:16:28+08:00
+  let m = moment(date).fromNow();
   if (m.indexOf('in a few second') != -1) {
     m = 'Arriving';
+  }
+  if (m.indexOf('a few seconds ago') != -1) {
+    m = 'Arrived';
   }
   return m;
 }

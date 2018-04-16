@@ -4,19 +4,15 @@ $(document).ready(function() {
   
 function loadnewdata() {
 	try {
-      
-      //location.reload();
-			$.ajax({
-        type: 'GET',
-        //contentType: 'application/json',
-        url: 'http://localhost:3000/46479',						
-        success: function(data) {
-            console.log('success');
-            console.log(data);
-            //console.log(JSON.stringify(data));
-            $("#desc").html(data);
-        }
-      })
+    //location.reload();
+    $.ajax({
+      type: 'GET',
+      url: '/46479',						
+      success: function(data) {
+          console.log('success');
+          $("#desc").html(data);
+      }
+    })
 	} catch(e) {
 		alert(e);
 	}

@@ -92,8 +92,16 @@ const getBusData = (busId, cb) => {
     .then(function (res2) {
       res2.ShuttleServiceResult.shuttles.forEach(elem => {
         let arrivalTime = elem.arrivalTime;
+        console.log(arrivalTime);
+        arrivalTime = convertToHours(arrivalTime);
         let name = elem.name;
+        
         let nextArrivalTime = elem.nextArrivalTime;
+        if (nextArrivalTime === '-') {
+          nextArrivalTime = '-';
+        } else {
+          nextArrivalTime = 'in ' + elem.nextArrivalTime + ' minutes';
+        }
         let service = 'JTC';
 
         let data = {
@@ -134,6 +142,15 @@ const convertTo12Hour = (date) => {
   if (m.indexOf('a few seconds ago') != -1) {
     m = 'Arrived';
   }
+  return m;
+}
+
+const convertToHours = (time) => {
+  let m = moment().add(time,'m').format('hh:mm A');
+  if (time === '-') {
+    m = '-';
+  }
+  console.log(m);
   return m;
 }
 
